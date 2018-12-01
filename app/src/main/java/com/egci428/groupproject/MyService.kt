@@ -206,9 +206,8 @@ class MyService : Service(), SensorEventListener, StepListener {
                     for(i in dataSnapshot.children){
                         val data = i.getValue(dataSet::class.java)
                         dataList.add(data!!)
-
                     }
-                    Toast.makeText(applicationContext,"Updated completed",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext,"Update completed",Toast.LENGTH_SHORT).show()
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {}
@@ -279,7 +278,6 @@ class MyService : Service(), SensorEventListener, StepListener {
             }
             override fun onCancelled(error: DatabaseError) {}
         })
-
     }
 
     override fun step(timeNs: Long) {

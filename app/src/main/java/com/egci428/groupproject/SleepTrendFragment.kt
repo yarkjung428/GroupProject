@@ -36,6 +36,7 @@ class SleepTrendFragment : android.support.v4.app.Fragment() {
     private var listener: OnFragmentInteractionListener? = null
     private var chartlabels: ArrayList<String>? = null
     private var hscrollview: HorizontalScrollView? = null
+    private var tv: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +56,8 @@ class SleepTrendFragment : android.support.v4.app.Fragment() {
         var tv_hrs = view.findViewById(R.id.tv_hrs) as TextView
         var tv_mins = view.findViewById(R.id.tv_mins) as TextView
         var tv_dwm = view.findViewById(R.id.tv_DWM) as TextView
+        tv = view.findViewById(R.id.tv) as TextView
+
         hscrollview = view.findViewById(R.id.hscrollview) as HorizontalScrollView
 
         //(default) Function call: when this page is first loaded, the barChart(showing daily sleeping data) will show up
@@ -155,7 +158,11 @@ class SleepTrendFragment : android.support.v4.app.Fragment() {
             var min: Long = 0
             if(temp>=0) {
                 min = MyService.dataList[temp + i - 1].sleepDuration / 60
-            } else min = MyService.dataList[i - 1].sleepDuration / 60
+                Log.d("Sleep duration days: ", (MyService.dataList[temp+i-1].sleepDuration/60).toString())
+            } else {
+                min = MyService.dataList[i - 1].sleepDuration / 60
+                Log.d("Sleep duration days: ", (MyService.dataList[i-1].sleepDuration/60).toString())
+            }
             val tempmin = min%60
             var realmin: String = ""
             if(tempmin.toInt()<10) realmin = "0" + tempmin.toString()
@@ -175,12 +182,19 @@ class SleepTrendFragment : android.support.v4.app.Fragment() {
         barSetData(barChart,barEntries,labels, spltCurrentDate.get(0).toInt())
 
         //Adjust chart width according to the data size
-        barChart.getLayoutParams().width = 100*spltCurrentDate.get(0).toInt();
-        lineChart.getLayoutParams().width = 100*spltCurrentDate.get(0).toInt();
-
-        hscrollview!!.post(Runnable {
-            hscrollview!!.fullScroll(HorizontalScrollView.FOCUS_RIGHT)
-        })
+        if(count<=10) {
+            barChart.getLayoutParams().width = 1080
+            lineChart.getLayoutParams().width = 1080
+            tv!!.getLayoutParams().width = 1080
+        }
+        else {
+            barChart.getLayoutParams().width = 100 * spltCurrentDate.get(0).toInt();
+            lineChart.getLayoutParams().width = 100 * spltCurrentDate.get(0).toInt();
+            tv!!.getLayoutParams().width = 100 * spltCurrentDate.get(0).toInt();
+            hscrollview!!.post(Runnable {
+                hscrollview!!.fullScroll(HorizontalScrollView.FOCUS_RIGHT)
+            })
+        }
     }
 
     //Prepare data for drawing lineChart
@@ -241,12 +255,12 @@ class SleepTrendFragment : android.support.v4.app.Fragment() {
             val date = SimpleDateFormat("MMMM").parse(spltCurrentDate.get(1))
             val cal = Calendar.getInstance()
             cal.time = date
-            var currentMonth = ((cal.get(Calendar.MONTH)).toInt() + 2)
+            var currentMonth = ((cal.get(Calendar.MONTH)) + 1)
 
             for(i in 1..12) {
-                monthLabel.add(monthLabelIndex.get(currentMonth))
                 currentMonth++
                 if(currentMonth==13) currentMonth = 1
+                monthLabel.add(monthLabelIndex.get(currentMonth))
             }
 
             //get no of data
@@ -279,12 +293,9 @@ class SleepTrendFragment : android.support.v4.app.Fragment() {
         if(weekormonth == 1) lineSetData(lineChart,lineEntries,monthLabel)
 
         //Adjust chart width according to the data size
-        barChart.getLayoutParams().width = 500;
-        lineChart.getLayoutParams().width = 500;
-
-        hscrollview!!.post(Runnable {
-            hscrollview!!.fullScroll(HorizontalScrollView.FOCUS_RIGHT)
-        })
+        barChart.getLayoutParams().width = 2000
+        lineChart.getLayoutParams().width = 2000
+        tv!!.getLayoutParams().width = 2000
     }
 
     //Set data to the barChart

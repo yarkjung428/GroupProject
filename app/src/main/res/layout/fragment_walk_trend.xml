@@ -73,6 +73,7 @@
                         android:layout_width="500dp"
                         android:layout_height="200dp"/>
                     <TextView
+                        android:id="@+id/tv"
                         android:layout_width="390dp"
                         android:layout_height="15dp"
                         android:background="@color/colorWhite"

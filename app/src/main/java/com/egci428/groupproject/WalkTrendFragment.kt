@@ -34,6 +34,7 @@ class WalkTrendFragment : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
     private var chartlabels: ArrayList<String>? = null
     private var hscrollview: HorizontalScrollView? = null
+    private var tv: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +53,7 @@ class WalkTrendFragment : Fragment() {
         var tv_dwm = view.findViewById(R.id.tv_DWM) as TextView
         var tv_step = view.findViewById(R.id.tv_step) as TextView
         var tv_date = view.findViewById(R.id.tv_date) as TextView
+        tv = view.findViewById(R.id.tv) as TextView
         hscrollview = view.findViewById(R.id.hscrollview) as HorizontalScrollView
 
         daysBarData(barChart,lineChart)
@@ -159,12 +161,19 @@ class WalkTrendFragment : Fragment() {
         barSetData(barChart,barEntries,labels, spltCurrentDate.get(0).toInt())
 
         //Adjust chart width according to the data size
-        barChart.getLayoutParams().width = 100*spltCurrentDate.get(0).toInt();
-        lineChart.getLayoutParams().width = 100*spltCurrentDate.get(0).toInt();
-
-        hscrollview!!.post(Runnable {
-            hscrollview!!.fullScroll(HorizontalScrollView.FOCUS_RIGHT)
-        })
+        if(count<=10) {
+            barChart.getLayoutParams().width = 1080
+            lineChart.getLayoutParams().width = 1080
+            tv!!.getLayoutParams().width = 1080
+        }
+        else {
+            barChart.getLayoutParams().width = 100 * spltCurrentDate.get(0).toInt();
+            lineChart.getLayoutParams().width = 100 * spltCurrentDate.get(0).toInt();
+            tv!!.getLayoutParams().width = 100 * spltCurrentDate.get(0).toInt();
+            hscrollview!!.post(Runnable {
+                hscrollview!!.fullScroll(HorizontalScrollView.FOCUS_RIGHT)
+            })
+        }
     }
 
     //Prepare data for drawing lineChart
@@ -223,12 +232,12 @@ class WalkTrendFragment : Fragment() {
             val date = SimpleDateFormat("MMMM").parse(spltCurrentDate.get(1))
             val cal = Calendar.getInstance()
             cal.time = date
-            var currentMonth = ((cal.get(Calendar.MONTH)).toInt() + 2)
+            var currentMonth = ((cal.get(Calendar.MONTH)).toInt() + 1)
 
             for(i in 1..12) {
-                monthLabel.add(monthLabelIndex.get(currentMonth))
                 currentMonth++
                 if(currentMonth==13) currentMonth = 1
+                monthLabel.add(monthLabelIndex.get(currentMonth))
             }
 
             //get no of data
@@ -260,12 +269,9 @@ class WalkTrendFragment : Fragment() {
         if(weekormonth == 1) lineSetData(lineChart,lineEntries,monthLabel)
 
         //Adjust chart width according to the data size
-        barChart.getLayoutParams().width = 500;
-        lineChart.getLayoutParams().width = 500;
-
-        hscrollview!!.post(Runnable {
-            hscrollview!!.fullScroll(HorizontalScrollView.FOCUS_RIGHT)
-        })
+        barChart.getLayoutParams().width = 2000
+        lineChart.getLayoutParams().width = 2000
+        tv!!.getLayoutParams().width = 2000
     }
 
     //Set data to the barChart

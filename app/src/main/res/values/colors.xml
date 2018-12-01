@@ -8,9 +8,11 @@
     <color name="colorBlack">#000000</color>
     <color name="colorSleep">#086a8f</color>
     <color name="colorWalk">#6fc052</color>
+    <color name="colorWalkk">#307616</color>
     <color name="colorMap">#f8bd3e</color>
     <color name="colorGrey">#dbdbdb</color>
     <color name="colorDarkGrey">#949494</color>
     <color name="colorSave">#4f99d6</color>
     <color name="colorCancel">#cd4141</color>
+    <color name="colorLoading">#ebeff4</color>
 </resources>
